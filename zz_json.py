@@ -42,4 +42,4 @@ def get_all():
     if len(data) < 1:
       return "No aliases currently added!"
     formatted_data = "\n".join(f"{alias}: '{directory}'" for alias, directory in data.items())
-  return formatted_data
+  return formatted_data + "\n"
