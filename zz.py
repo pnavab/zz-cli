@@ -11,7 +11,9 @@ def color_text(text, color):
 
 def main():
   if len(sys.argv) > 1:
-    if sys.argv[1] == "open":
+    if sys.argv[1] == "-h" or sys.argv[1] == "--help":
+      help()
+    elif sys.argv[1] == "open":
       if len(sys.argv) == 3:
         open(sys.argv[2])
       elif len(sys.argv) == 4 and sys.argv[3] == "-r":
