@@ -116,7 +116,7 @@ def start(alias):
     return
   if path[0] == "\"" or path[0] == "\'":
     path = path[1:-1]
-  if path[-3:] != "exe":
+  if path[-4:] != ".exe":
     print(color_text(f"Alias '{alias}' does not point to an executable path", Fore.RED))
     return
   subprocess.run([path], shell=True)
