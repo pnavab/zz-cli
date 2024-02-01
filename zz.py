@@ -2,19 +2,16 @@
 import sys
 import os
 import subprocess
-import readline
+from prompt_toolkit import prompt
+from prompt_toolkit.completion import PathCompleter
 from colorama import Fore, Back, Style, init
 import zz_json as helpers
+
 
 init()
 def color_text(text, color):
   return f"{color}{text}{Style.RESET_ALL}"
 
-def complete_path(text, state):
-  return (path for path in os.listdir() if path.startswith(text))
-readline.set_completer_delims(' \t\n')
-readline.parse_and_bind('tab: complete')
-readline.set_completer(complete_path)
 
 def main():
   if len(sys.argv) > 1:
@@ -90,7 +87,8 @@ def add(alias):
     print(color_text(f"Alias {alias} already points to {check_dir}", Fore.RED))
     help()
     return
-  directory = input("Enter the full path: ")
+  # Using PathCompleter for directory path completion
+  directory = prompt('Enter the full path: ', completer=PathCompleter(), complete_while_typing=True, complete_in_thread=True)
   if helpers.add_entry(alias, directory):
     print(color_text(f"Successfully added '{alias}' pointing to '{directory}'", Fore.GREEN))
   else:
