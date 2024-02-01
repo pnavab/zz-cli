@@ -5,6 +5,7 @@ import subprocess
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import PathCompleter
 from colorama import Fore, Back, Style, init
+import webbrowser
 import zz_json as helpers
 
 
@@ -47,6 +48,11 @@ def main():
         help()
     elif sys.argv[1] == "list":
       list_all()
+    elif sys.argv[1] == "search":
+      if len(sys.argv) < 3:
+        search()
+      else:
+        help()
     else:
       print(color_text("Invalid command!", Fore.RED))
       help()
@@ -124,6 +130,11 @@ def delete(alias):
     print(color_text(f"Alias '{alias}' removed successfully", Fore.GREEN))
   else:
     print(color_text("That alias was not found", Fore.RED))
+
+def search():
+  query = input("Enter search query: ")
+  search_url = f"https://www.google.com/search?q={query}"
+  webbrowser.open_new_tab(search_url)
 
 if __name__ == "__main__":
   main()
