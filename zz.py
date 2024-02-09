@@ -16,48 +16,91 @@ def color_text(text, color):
 
 def main():
   if len(sys.argv) > 1:
-    if sys.argv[1] == "-h" or sys.argv[1] == "--help":
-      help()
-    elif sys.argv[1] == "open":
-      if len(sys.argv) == 3:
-        open(sys.argv[2])
-      elif len(sys.argv) == 2:
-        print(color_text("Missing alias in command", Fore.RED))
-      elif len(sys.argv) == 4 and sys.argv[3] == "-r":
-        open(sys.argv[2], reload=True)
-      else:
+    match sys.argv[1]:
+      case "-h":
+        help()
+      case "open":
+        if len(sys.argv) == 3:
+          open(sys.argv[2])
+        elif len(sys.argv) == 2:
+          print(color_text("Missing alias in command", Fore.RED))
+        elif len(sys.argv) == 4 and sys.argv[3] == "-r":
+          open(sys.argv[2], reload=True)
+        else:
+          print(color_text("Invalid command!", Fore.RED))
+          help()
+      case "add":
+        if len(sys.argv) < 4:
+          if sys.argv[2] == ".":
+            add_current_directory()
+          else:
+            add(sys.argv[2])
+        else:
+          help()
+      case "rm":
+        if len(sys.argv) < 4:
+          delete(sys.argv[2])
+        else:
+          help()
+      case "start":
+        if len(sys.argv) < 4:
+          start(sys.argv[2])
+        else:
+          help()
+      case "list":
+        list_all()
+      case "ask":
+        if len(sys.argv) < 3:
+          search()
+        else:
+          help()
+      case _:
         print(color_text("Invalid command!", Fore.RED))
         help()
-    elif sys.argv[1] == "add":
-      if len(sys.argv) < 4:
-        if sys.argv[2] == ".":
-          add_current_directory()
-        else:
-          add(sys.argv[2])
-      else:
-        help()
-    elif sys.argv[1] == "rm":
-      if len(sys.argv) < 4:
-        delete(sys.argv[2])
-      else:
-        help()
-    elif sys.argv[1] == "start":
-      if len(sys.argv) < 4:
-        start(sys.argv[2])
-      else:
-        help()
-    elif sys.argv[1] == "list":
-      list_all()
-    elif sys.argv[1] == "search":
-      if len(sys.argv) < 3:
-        search()
-      else:
-        help()
-    else:
-      print(color_text("Invalid command!", Fore.RED))
-      help()
   else:
     help()
+
+
+  #   if sys.argv[1] == "-h" or sys.argv[1] == "--help":
+  #     help()
+  #   elif sys.argv[1] == "open":
+  #     if len(sys.argv) == 3:
+  #       open(sys.argv[2])
+  #     elif len(sys.argv) == 2:
+  #       print(color_text("Missing alias in command", Fore.RED))
+  #     elif len(sys.argv) == 4 and sys.argv[3] == "-r":
+  #       open(sys.argv[2], reload=True)
+  #     else:
+  #       print(color_text("Invalid command!", Fore.RED))
+  #       help()
+  #   elif sys.argv[1] == "add":
+  #     if len(sys.argv) < 4:
+  #       if sys.argv[2] == ".":
+  #         add_current_directory()
+  #       else:
+  #         add(sys.argv[2])
+  #     else:
+  #       help()
+  #   elif sys.argv[1] == "rm":
+  #     if len(sys.argv) < 4:
+  #       delete(sys.argv[2])
+  #     else:
+  #       help()
+  #   elif sys.argv[1] == "start":
+  #     if len(sys.argv) < 4:
+  #       start(sys.argv[2])
+  #     else:
+  #       help()
+  #   elif sys.argv[1] == "list":
+  #     list_all()
+  #   elif sys.argv[1] == "search":
+  #     if len(sys.argv) < 3:
+  #       search()
+  #     else:
+  #       help()
+  #   else:
+  #     print(color_text("Invalid command!", Fore.RED))
+  #     help()
 
 def help():
   print("="*80)
