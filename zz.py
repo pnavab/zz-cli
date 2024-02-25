@@ -54,53 +54,14 @@ def main():
           search()
         else:
           help()
+      case "init":
+        if len(sys.argv) < 3:
+          git_init()
       case _:
         print(color_text("Invalid command!", Fore.RED))
         help()
   else:
     help()
-
-
-  #   if sys.argv[1] == "-h" or sys.argv[1] == "--help":
-  #     help()
-  #   elif sys.argv[1] == "open":
-  #     if len(sys.argv) == 3:
-  #       open(sys.argv[2])
-  #     elif len(sys.argv) == 2:
-  #       print(color_text("Missing alias in command", Fore.RED))
-  #     elif len(sys.argv) == 4 and sys.argv[3] == "-r":
-  #       open(sys.argv[2], reload=True)
-  #     else:
-  #       print(color_text("Invalid command!", Fore.RED))
-  #       help()
-  #   elif sys.argv[1] == "add":
-  #     if len(sys.argv) < 4:
-  #       if sys.argv[2] == ".":
-  #         add_current_directory()
-  #       else:
-  #         add(sys.argv[2])
-  #     else:
-  #       help()
-  #   elif sys.argv[1] == "rm":
-  #     if len(sys.argv) < 4:
-  #       delete(sys.argv[2])
-  #     else:
-  #       help()
-  #   elif sys.argv[1] == "start":
-  #     if len(sys.argv) < 4:
-  #       start(sys.argv[2])
-  #     else:
-  #       help()
-  #   elif sys.argv[1] == "list":
-  #     list_all()
-  #   elif sys.argv[1] == "search":
-  #     if len(sys.argv) < 3:
-  #       search()
-  #     else:
-  #       help()
-  #   else:
-  #     print(color_text("Invalid command!", Fore.RED))
-  #     help()
 
 def help():
   print("="*80)
@@ -178,6 +139,23 @@ def search():
   query = input("Enter search query: ")
   search_url = f"https://www.google.com/search?q={query}"
   webbrowser.open_new_tab(search_url)
+
+def git_init():
+  if os.path.exists(".git"):
+    print("Git has already been initialized here")
+  else:
+    try:
+      commit_message = "Initial commit from zz-cli"
+      subprocess.run(["git", "init"], capture_output=True, text=True)
+      subprocess.run(["git", "add", "."], capture_output=True, text=True)
+      subprocess.run(["git", "commit", "-m", commit_message], capture_output=True, text=True)
+      subprocess.run(["git", "branch", "-M", "main"], capture_output=True, text=True)
+      github_link = input("Enter github remote link: ")
+      subprocess.run(["git", "remote", "add", "origin", github_link], capture_output=True, text=True)
+      subprocess.run(["git", "push", "-u", "origin", "main"], capture_output=True, text=True)
+      print(f"Successfully initialized git repo at {github_link}")
+    except Exception as e:
+      print("Error initializing git repository")
 
 if __name__ == "__main__":
   main()
