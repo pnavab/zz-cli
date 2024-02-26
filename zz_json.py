@@ -43,3 +43,9 @@ def get_all():
       return "No aliases currently added!"
     formatted_data = "\n".join(f"{alias}: '{directory}'" for alias, directory in data.items())
   return formatted_data + "\n"
+
+def get_github_token():
+  with open('C:/Users/pablo/zz-cli/env.json', 'r', encoding='utf-8') as file:
+    data = json.load(file)
+    token = data.get('token', None)
+    return token

@@ -2,6 +2,7 @@
 import sys
 import os
 import subprocess
+import json
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import PathCompleter
 from colorama import Fore, Back, Style, init
@@ -54,9 +55,18 @@ def main():
           search()
         else:
           help()
+      case "create":
+        if len(sys.argv) < 4:
+          git_create(sys.argv[2])
+        else:
+          help()
       case "init":
         if len(sys.argv) < 3:
           git_init()
+        elif len(sys.argv) < 4:
+          git_init(sys.argv[2])
+        else:
+          help()
       case _:
         print(color_text("Invalid command!", Fore.RED))
         help()
@@ -140,7 +150,43 @@ def search():
   search_url = f"https://www.google.com/search?q={query}"
   webbrowser.open_new_tab(search_url)
 
-def git_init():
+def git_create(repo_name):
+  token = helpers.get_github_token()
+  is_private = input("Make this repo public? Default is private. (y): ")
+  if(is_private == "yes" or is_private == "y" or is_private == "Yes"):
+    is_private = r"false"
+  else:
+    is_private = r"true"
+  result = subprocess.Popen(
+    [
+      'wsl', 'curl',
+      '-L',
+      '-X', 'POST',
+      '-H', 'Accept: application/vnd.github+json',
+      '-H', f'Authorization: Bearer {token}',
+      '-H', 'X-Github-Api-Version: 2022-11-28',
+      'https://api.github.com/user/repos',
+      '-d', f'{{"name": "{repo_name}", "description": "Created by zz-cli", "homepage":"https://github.com", "private":{is_private},"is_template":false}}'
+    ],
+    stdout=subprocess.PIPE,
+    stderr=subprocess.PIPE,
+    shell=True)
+  stdout, stderr = result.communicate()
+  if result.returncode == 0:
+    response_data = json.loads(stdout.decode())
+    if "message" in response_data and response_data["message"] == "Repository creation failed.":
+      print(f"Failed to create repository {repo_name}")
+      return False
+    else:
+      print(f"Repository {repo_name} created successfully")
+      return True
+
+def git_init(repo_name = None):
+  if repo_name is not None:
+    if not git_create(repo_name):
+      return
+  github_link = f"https://github.com/pnavab/{repo_name}.git" if repo_name is not None else None
+
   if os.path.exists(".git"):
     print("Git has already been initialized here")
   else:
@@ -150,7 +196,7 @@ def git_init():
       subprocess.run(["git", "add", "."], capture_output=True, text=True)
       subprocess.run(["git", "commit", "-m", commit_message], capture_output=True, text=True)
       subprocess.run(["git", "branch", "-M", "main"], capture_output=True, text=True)
-      github_link = input("Enter github remote link: ")
+      github_link = github_link if github_link is not None else input("Enter github remote link: ")
       subprocess.run(["git", "remote", "add", "origin", github_link], capture_output=True, text=True)
       subprocess.run(["git", "push", "-u", "origin", "main"], capture_output=True, text=True)
       print(f"Successfully initialized git repo at {github_link}")
