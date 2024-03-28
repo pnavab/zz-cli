@@ -67,6 +67,11 @@ def main():
           git_init(sys.argv[2])
         else:
           help()
+      case "pa":
+        if len(sys.argv) < 3:
+          git_push_all()
+        else:
+          help()
       case _:
         print(color_text("Invalid command!", Fore.RED))
         help()
@@ -83,6 +88,7 @@ def help():
   print(f"   Run {color_text("'zz ask'", Fore.CYAN)} to enable search mode")
   print(f"   Run {color_text("'zz init'", Fore.CYAN)} to initialize .git and commit all current content to a remote Github repository")
   print(f"   Run {color_text("'zz init <repo name>'", Fore.CYAN)} to create a remote Github repository with the name and push all current content to it")
+  print(f"   Run {color_text("'zz pa'", Fore.CYAN)} to enable pushing all code to Github with 'git add .'")
   print("="*80)
 
 def list_all():
@@ -205,6 +211,13 @@ def git_init(repo_name = None):
       print(f"Successfully initialized git repo at {github_link}")
     except Exception as e:
       print("Error initializing git repository")
+
+def git_push_all():
+  commit_message = input("Commit Message: ")
+  subprocess.run(['git', 'add', '.'], shell=True)
+  subprocess.run(['git', 'commit', '-m', commit_message], shell=True)
+  subprocess.run(['git', 'push'], shell=True)
+
 
 if __name__ == "__main__":
   main()
