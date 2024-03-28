@@ -175,7 +175,7 @@ def git_create(repo_name):
       '-H', f'Authorization: Bearer {token}',
       '-H', 'X-Github-Api-Version: 2022-11-28',
       'https://api.github.com/user/repos',
-      '-d', f'{{"name": "{repo_name}", "description": "Created by zz-cli", "homepage":"https://github.com", "private":{is_private},"is_template":false}}'
+      '-d', f'{{"name": "{repo_name}", "homepage":"https://github.com", "private":{is_private},"is_template":false}}'
     ],
     stdout=subprocess.PIPE,
     stderr=subprocess.PIPE,
@@ -191,26 +191,27 @@ def git_create(repo_name):
       return True
 
 def git_init(repo_name = None):
+  if os.path.exists(".git"):
+    print("Git has already been initialized here")
+    return
+  
   if repo_name is not None:
     if not git_create(repo_name):
       return
   github_link = f"https://github.com/pnavab/{repo_name}.git" if repo_name is not None else None
 
-  if os.path.exists(".git"):
-    print("Git has already been initialized here")
-  else:
-    try:
-      commit_message = "Initial commit from zz-cli"
-      subprocess.run(["git", "init"], capture_output=True, text=True)
-      subprocess.run(["git", "add", "."], capture_output=True, text=True)
-      subprocess.run(["git", "commit", "-m", commit_message], capture_output=True, text=True)
-      subprocess.run(["git", "branch", "-M", "main"], capture_output=True, text=True)
-      github_link = github_link if github_link is not None else input("Enter github remote link: ")
-      subprocess.run(["git", "remote", "add", "origin", github_link], capture_output=True, text=True)
-      subprocess.run(["git", "push", "-u", "origin", "main"], capture_output=True, text=True)
-      print(f"Successfully initialized git repo at {github_link}")
-    except Exception as e:
-      print("Error initializing git repository")
+  try:
+    commit_message = "Initial commit from zz-cli"
+    subprocess.run(["git", "init"], capture_output=True, text=True)
+    subprocess.run(["git", "add", "."], capture_output=True, text=True)
+    subprocess.run(["git", "commit", "-m", commit_message], capture_output=True, text=True)
+    subprocess.run(["git", "branch", "-M", "main"], capture_output=True, text=True)
+    github_link = github_link if github_link is not None else input("Enter github remote link: ")
+    subprocess.run(["git", "remote", "add", "origin", github_link], capture_output=True, text=True)
+    subprocess.run(["git", "push", "-u", "origin", "main"], capture_output=True, text=True)
+    print(f"Successfully initialized git repo at {github_link}")
+  except Exception as e:
+    print("Error initializing git repository")
 
 def git_push_all():
   commit_message = input("Commit Message: ")
