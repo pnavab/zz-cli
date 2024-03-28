@@ -111,6 +111,9 @@ def open(alias, reload=False):
     print(f"Error: {e}")
 
 def add(alias):
+  """
+  Function to add an alias to the list, prompting user for a full file path to the directory
+  """
   check_dir = helpers.get_directory_from_alias(alias)
   if check_dir is not None:
     print(color_text(f"Alias {alias} already points to {check_dir}", Fore.RED))
@@ -124,6 +127,9 @@ def add(alias):
     print(color_text("Error adding pair", Fore.RED))
 
 def add_current_directory():
+  """
+  Function to add the current directory path to the list, prompting user for an alias
+  """
   directory = os.getcwd()
   alias = input("Enter the alias: ")
   check_dir = helpers.get_directory_from_alias(alias)
@@ -160,6 +166,9 @@ def search():
   webbrowser.open_new_tab(search_url)
 
 def git_create(repo_name):
+  """
+  Function to create the remote repository on github.com named by the parameter
+  """
   token = helpers.get_github_token()
   is_private = input("Make this repo public? Default is private. (y): ")
   if(is_private == "yes" or is_private == "y" or is_private == "Yes"):
@@ -191,6 +200,10 @@ def git_create(repo_name):
       return True
 
 def git_init(repo_name = None):
+  """
+  Function to initialize a git repo in the current directory if it does not already exist
+  If a repo name is specified in the parameters, it will first create a remote repository under that name, then initialize the current directory and push all code there
+  """
   if os.path.exists(".git"):
     print("Git has already been initialized here")
     return
