@@ -11,4 +11,4 @@ if errorlevel 1 (
 )
 
 echo DIRECTORY=%cd% > .env
-echo {} > pi.json
+echo {} > zz.json
