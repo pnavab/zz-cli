@@ -8,3 +8,6 @@ Run 'zz start \<alias>' to run a previously added executable path
 Run 'zz ask' to enable search mode  
 Run 'zz init' to initialize .git and commit all current content to a remote Github repository  
 Run 'zz init \<repo name>' to create a remote Github repository with the name and push all current content to it  
+Run 'zz pa' to push all code to Github using 'git add .' command"  
+Run 'zz clone' to fetch all your own repositories and clone the selected one  
+Run 'zz clone \<Github username>' to fetch all repositories from the specified account and clone the selected repository  
