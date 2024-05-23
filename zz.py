@@ -94,10 +94,10 @@ def help():
   print(f"   Run {color_text("'zz add .'", Fore.CYAN)} to add the current path with a new alias")
   print(f"   Run {color_text("'zz open <alias>'", Fore.CYAN)} to open a previously added directory in VScode. Append '-r' to open in the same window")
   print(f"   Run {color_text("'zz start <alias>'", Fore.CYAN)} to run a previously added executable path")
-  print(f"   Run {color_text("'zz ask'", Fore.CYAN)} to enable search mode")
+  print(f"   Run {color_text("'zz ask'", Fore.CYAN)} to enable browser search mode")
   print(f"   Run {color_text("'zz init'", Fore.CYAN)} to initialize .git and commit all current content to a remote Github repository")
   print(f"   Run {color_text("'zz init <repo name>'", Fore.CYAN)} to create a remote Github repository with the name and push all current content to it")
-  print(f"   Run {color_text("'zz pa'", Fore.CYAN)} to enable pushing all code to Github with 'git add .'")
+  print(f"   Run {color_text("'zz pa'", Fore.CYAN)} to to push all code to Github using 'git add .' command")
   print(f"   Run {color_text("'zz clone <OPTIONAL: Github account>'", Fore.CYAN)} to fetch all repositories from the specified Github account and clone the selected one")
   print("="*80)
 
