@@ -7,6 +7,8 @@ from prompt_toolkit import prompt
 from prompt_toolkit.completion import PathCompleter
 from colorama import Fore, Back, Style, init
 import webbrowser
+import requests
+import survey
 import zz_json as helpers
 
 
@@ -70,6 +72,13 @@ def main():
       case "pa":
         if len(sys.argv) < 3:
           git_push_all()
+        else:
+          help()
+      case "clone":
+        if len(sys.argv) < 3:
+          git_clone()
+        elif len(sys.argv) < 4:
+          git_clone(sys.argv[2])
         else:
           help()
       case _:
@@ -231,6 +240,35 @@ def git_push_all():
   subprocess.run(['git', 'add', '.'], shell=True)
   subprocess.run(['git', 'commit', '-m', commit_message], shell=True)
   subprocess.run(['git', 'push'], shell=True)
+
+def git_clone(account_name = "pnavab"):
+  token = helpers.get_github_token()
+  repositories = []
+  headers = {
+    "Accept": "application/vnd.github+json",
+    "Authorization": f"Bearer {token}", 
+    "X-Github-Api-Version": "2022-11-28"
+  }
+  if account_name == "pnavab":
+    response = requests.get("https://api.github.com/user/repos", headers=headers)
+  else:
+    response = requests.get(f"https://api.github.com/users/{account_name}/repos", headers=headers)
+  response = response.json()
+
+  for repo in response:
+    repositories.append(repo["name"])
+  current_directories = os.listdir()
+  filtered_repositories = [repo for repo in repositories if repo not in current_directories]
+
+  index = survey.routines.select('Select Repository to Clone: ',  options = filtered_repositories,  focus_mark = '> ',  evade_color = survey.colors.basic('yellow'))
+  selected_repo = filtered_repositories[index]
+  print("selected repo is", selected_repo)
+  try:
+    subprocess.run(["git", "clone", f"https://github.com/{account_name}/{selected_repo}.git"], shell=True)
+    print(f"Successfully cloned {selected_repo}")
+  except Exception as e:
+    print(f"Error cloning repository {selected_repo}")
+
 
 
 if __name__ == "__main__":
