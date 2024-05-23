@@ -266,6 +266,9 @@ def git_clone(account_name = "pnavab"):
   try:
     subprocess.run(["git", "clone", f"https://github.com/{account_name}/{selected_repo}.git"], shell=True)
     print(f"Successfully cloned {selected_repo}")
+    open_vscode = input("Open the repository in VSCode? (y/n): ")
+    if open_vscode == "y" or open_vscode == "yes" or open_vscode == "Y" or open_vscode == "Yes":
+      subprocess.run(["code", selected_repo], shell=True)
   except Exception as e:
     print(f"Error cloning repository {selected_repo}")
 
