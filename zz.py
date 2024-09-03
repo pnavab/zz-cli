@@ -20,7 +20,7 @@ def color_text(text, color):
 def main():
   if len(sys.argv) > 1:
     match sys.argv[1]:
-      case "-h":
+      case "-h", "--help":
         help()
       case "open":
         if len(sys.argv) == 3:
@@ -233,6 +233,7 @@ def git_init(repo_name = None):
     subprocess.run(["git", "remote", "add", "origin", github_link], capture_output=True, text=True)
     subprocess.run(["git", "push", "-u", "origin", "main"], capture_output=True, text=True)
     print(f"Successfully initialized git repo at {github_link}")
+    webbrowser.open_new_tab(github_link)
   except Exception as e:
     print("Error initializing git repository")
 
