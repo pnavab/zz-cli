@@ -214,9 +214,8 @@ def git_init(repo_name = None):
   Function to initialize a git repo in the current directory if it does not already exist
   If a repo name is specified in the parameters, it will first create a remote repository under that name, then initialize the current directory and push all code there
   """
-  if os.path.exists(".git"):
-    print("Git has already been initialized here")
-    return
+  if not os.path.exists(".git"):
+    subprocess.run(["git", "init"], capture_output=True, text=True)
   
   if repo_name is not None:
     if not git_create(repo_name):
@@ -225,7 +224,6 @@ def git_init(repo_name = None):
 
   try:
     commit_message = "Initial commit from zz-cli"
-    subprocess.run(["git", "init"], capture_output=True, text=True)
     subprocess.run(["git", "add", "."], capture_output=True, text=True)
     subprocess.run(["git", "commit", "-m", commit_message], capture_output=True, text=True)
     subprocess.run(["git", "branch", "-M", "main"], capture_output=True, text=True)
