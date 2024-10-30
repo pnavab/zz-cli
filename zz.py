@@ -24,11 +24,11 @@ def main():
                 help()
             case "open":
                 if len(sys.argv) == 3:
-                    open(sys.argv[2])
+                    project_open(sys.argv[2])
                 elif len(sys.argv) == 2:
                     print(color_text("Missing alias in command", Fore.RED))
                 elif len(sys.argv) == 4 and sys.argv[3] == "-r":
-                    open(sys.argv[2], reload=True)
+                    project_open(sys.argv[2], reload=True)
                 else:
                     print(color_text("Invalid command!", Fore.RED))
                     help()
@@ -79,11 +79,6 @@ def main():
                     git_clone()
                 elif len(sys.argv) < 4:
                     git_clone(sys.argv[2])
-                else:
-                    help()
-            case "stats":
-                if len(sys.argv) < 3:
-                    project_stats()
                 else:
                     help()
             case _:
