@@ -81,6 +81,11 @@ def main():
                     git_clone(sys.argv[2])
                 else:
                     help()
+            case "make":
+                if len(sys.argv) < 3:
+                    make_project(sys.argv[2])
+                else:
+                    help()
             case _:
                 print(color_text("Invalid command!", Fore.RED))
                 help()
@@ -100,7 +105,7 @@ def help():
     print(f"     Run {color_text("'zz init <repo name>'", Fore.CYAN)} to create a remote Github repository with the name and push all current content to it")
     print(f"     Run {color_text("'zz pa'", Fore.CYAN)} to to push all code to Github using 'git add .' command")
     print(f"     Run {color_text("'zz clone <OPTIONAL: Github account>'", Fore.CYAN)} to fetch all repositories from the specified Github account and clone the selected one")
-    print(f"     Run {color_text("'zz stats'", Fore.CYAN)} to view the stats of the current project for tracked files")
+    print(f"     Run {color_text("'zz make <project_name>'", Fore.CYAN)} to create a new project in your specified projects directory")
     print("="*80)
 
 
@@ -286,6 +291,17 @@ def git_clone(account_name = "pnavab"):
         print(f"Error cloning repository {selected_repo}")
 
 
+def make_project(directory_name):
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    with open(f'{dir_path}/env.json', 'r') as f:
+        data = json.load(f)
+        projects_dir = data.get('projects_directory', None)
+        if projects_dir is not None:
+            new_project_dir = f"{projects_dir}/{directory_name}"
+            subprocess.run(["wsl", "mkdir", new_project_dir], shell=True)
+            subprocess.run(["code", new_project_dir], shell=True)
+        else:
+            print(color_text("No projects directory found", Fore.RED))
 
 if __name__ == "__main__":
     main()
