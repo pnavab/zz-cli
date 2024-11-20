@@ -82,7 +82,7 @@ def main():
                 else:
                     help()
             case "make":
-                if len(sys.argv) < 3:
+                if len(sys.argv) < 4:
                     make_project(sys.argv[2])
                 else:
                     help()
@@ -297,8 +297,8 @@ def make_project(directory_name):
         data = json.load(f)
         projects_dir = data.get('projects_directory', None)
         if projects_dir is not None:
-            new_project_dir = f"{projects_dir}/{directory_name}"
-            subprocess.run(["wsl", "mkdir", new_project_dir], shell=True)
+            new_project_dir = os.path.join(projects_dir, directory_name)
+            os.makedirs(new_project_dir, exist_ok=True)
             subprocess.run(["code", new_project_dir], shell=True)
         else:
             print(color_text("No projects directory found", Fore.RED))
